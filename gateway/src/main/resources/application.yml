@@ -1,0 +1,131 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: gateway
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+  cloud:
+    gateway:
+      routes:
+      - id: produce1_route
+        uri: lb://produce1
+        predicates:
+        - Path=/api/produce1/**
+        filters:
+        - StripPrefix=2
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallback-uri: forward:/fallback
+        - name: RequestRateLimiter
+          args:
+           # 每秒允许处理的请求数量
+            redis-rate-limiter.replenishRate: 1
+             # 每秒最大处理的请求数量
+            redis-rate-limiter.burstCapacity: 2
+            # 限流策略，对应策略的Bean
+            key-resolver: "#{@ipKeyResolver}"
+      - id: produce_route
+        uri: lb://produce
+        metadata:
+          name: cooper
+          age: 18
+        predicates:
+        # 代理路由的第一个参数不能是服务名（produce），例如 /produce/**   /produce/API/**
+        # 如果代理路由的第一个参数是服务名则请求不会过滤器工厂无效  原因可能是请求直接走的lb协议那边
+        - Path=/api/produce/**
+        filters:
+        - AddRequestHeader=X-Request-red, blue
+        # 截取路由的前缀 截取到服务的真实路由之前
+        # 如 produce服务里的路由为/user/get
+        #如上面配置的path 为/API/** 则截取 1
+        #如上面配置的path 为/API/produce/** 则截取 2
+        - StripPrefix=2
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallback-uri: forward:/fallback
+#        - name: RequestRateLimiter
+#          args:
+#            # 每秒允许处理的请求数量
+#            redis-rate-limiter.replenishRate: 1
+#            # 每秒最大处理的请求数量
+#            redis-rate-limiter.burstCapacity: 2
+#            # 限流策略，对应策略的Bean
+#            key-resolver: "#{@ipKeyResolver}"
+        - name: RateLimiter
+          args:
+            permits: 1
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      #全局过滤器
+      default-filters:
+        #- AddRequestHeader=X-Request-red, blue
+    loadbalancer:
+      retry:
+        enabled: true
+
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka
+      #拉取服务信息时间间隔
+    registry-fetch-interval-seconds: 5
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          #开启信号量隔离 线程隔离Thread
+          strategy: SEMAPHORE
+          thread:
+            #网关熔断时间配置
+            timeoutInMilliseconds: 7000
+
+#ribbon:
+#  #关闭eureka的ribbon gaterway的ribbon才会有用
+#  eureka:
+#    enabled: false
+#  #请求处理超时时间
+#  ReadTimeout: 1000
+#  #请求连接超时时间
+#  ConnectTimeout: 1500
+#  NFLoadBalancerRuleClassName:  com.netflix.loadbalancer.RandomRule
+#  listOfServers: http://99.12.98.215:8080,http://99.12.98.215:8081,http://99.12.98.215:8082
+
+
+
+
+#produce:
+#  ribbon:
+#    #请求处理超时时间
+#    ReadTimeout: 1000
+#    #请求连接超时时间
+#    ConnectTimeout: 1500
+    #listOfServers: http://127.0.0.1:8100
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: debug
+
+
+#  没用
+ribbon:
+  ReadTimeout: 1000
+
+#guava 限流每秒允许
+permitsPerSecond: 1000
+redis:
+  timeout:
+    maxRandomTimeout: 8
+
+

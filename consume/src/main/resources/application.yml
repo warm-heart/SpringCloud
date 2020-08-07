@@ -1,0 +1,150 @@
+
+server:
+  port: 8200
+spring:
+  application:
+    name: consume
+  #数据源配置
+  datasource:
+    druid:
+      username: root
+      password: 1122
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/springboot_master?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      max-wait: 60000
+      filters: stat
+      web-stat-filter:
+        profile-enable: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        session-stat-enable: false
+        session-stat-max-count: 1000
+        principal-session-name: admin
+        principal-cookie-name: admin
+      stat-view-servlet:
+        login-password: admin
+        login-username: admin
+        url-pattern: /druid/*
+        reset-enable: true
+  #时间格式化配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+
+
+eureka:
+  client:
+  #是否拉取服务列表
+    fetch-registry: true
+    #注册到eureka
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8001/eureka
+
+
+
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+#开启服务熔断（降级）
+feign:
+  hystrix:
+    enabled: true
+    #优化 使用apache httpClient
+  httpclient:
+      enabled: true
+  compression:
+  #请求GZIP压缩
+    request:
+      enabled: true
+      #压缩支持的MIME type 默认配置了，这里可不配置
+      mime-types: text/xml,application/xml,application/json
+      #压缩数据大小的下限
+      min-request-size: 2048
+    #响应GZIP压缩
+    response:
+      enabled: true
+
+#  client:
+#    config:
+#      default:
+#      #连接时间
+#        connectTimeout: 4000
+#        #读取时间
+#        readTimeout: 5000
+#      produce:
+#        connectTimeout: 000
+#        readTimeout: 3000H
+
+
+hystrix:
+  threadpool:
+    default:
+      #线程池大小 默认为10
+      coreSize: 7
+      #最大线程池大小 默认和核心池大小相等
+      maximumSize: 9
+      #队列大小 默认为-1
+      maxQueueSize: 1000
+      queueSizeRejectionThreshold: 800
+    #单个服务的线程池配置
+    produce:
+      coreSize: 8
+      maxQueueSize: 500
+      #如果BlockingQueue队列中已经存在的任务数量大于这个值，那么拒绝执行任务，HystrixThreadPool的isQueueSpaceAvailable方法
+      #即使没有达到BlockQueue的最大容量 但达到此值设置的大小也会拒绝请求
+      #如果现在BlockingQueue中有 301个请求任务，大于queueSizeRejectionThreshold（300）则拒绝执行（降级处理）
+      queueSizeRejectionThreshold: 300
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+          #熔断时间配置
+            timeoutInMilliseconds: 2500
+    #针对单个接口的commandKey
+    "ProduceFeignService#get(String)":
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+    "ProduceFeignService#getBypath(String)":
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+
+#ribbon的全局配置 针对被调用的所有服务
+ribbon:
+  #请求处理超时时间
+  ReadTimeout: 1500
+  #请求连接超时时间
+  ConnectTimeout: 1500
+  #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetries: 1
+  #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1
+  #所有请求都重试
+  OkToRetryOnAllOperations: true
+  NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RandomRule
+
+
+#针对单个服务的配置 服务名开头（application.name的名称）
+produce:
+  ribbon:
+    ReadTimeout: 1500
+    ConnectTimeout: 1500
+    #NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RandomRule
+
+
+
+
+

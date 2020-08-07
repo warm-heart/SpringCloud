@@ -1,0 +1,52 @@
+
+
+server:
+  port: 8100
+spring:
+  application:
+    name: produce
+  #数据源配置
+  datasource:
+    druid:
+      username: root
+      password: 1122
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/springboot_master?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      max-wait: 60000
+      filters: stat
+      web-stat-filter:
+        profile-enable: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        session-stat-enable: false
+        session-stat-max-count: 1000
+        principal-session-name: admin
+        principal-cookie-name: admin
+      stat-view-servlet:
+        login-password: admin
+        login-username: admin
+        url-pattern: /druid/*
+        reset-enable: true
+  #时间戳配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+eureka:
+  client:
+  #是否拉取服务列表
+    fetch-registry: true
+    #注册到eureka
+    register-with-eureka: true
+    service-url: 
+      defaultZone: http://localhost:8001/eureka
+
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+

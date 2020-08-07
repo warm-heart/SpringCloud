@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.micro.produce.dao.UserDao">
+
+
+    <select id="users" resultType="com.micro.commons.entity.User">
+       select * from user
+
+   </select>
+
+    <select id="getUserByUserId" resultType="com.micro.commons.entity.User">
+       select * from user where userId=#{userId}
+
+   </select>
+
+   <insert id="insert" parameterType="com.micro.commons.entity.User">
+       insert into user(userId, userName, password, CreateTime)
+       values (userId,userName,password,CreateTime)
+   </insert>
+
+    <update id="update" parameterType="com.micro.commons.entity.User">
+        update user set userName=#{userName},password=#{password} where userId=#{userId}
+    </update>
+
+
+
+</mapper>

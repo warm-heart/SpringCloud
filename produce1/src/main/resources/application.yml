@@ -1,0 +1,20 @@
+
+
+server:
+  port: 8102
+spring:
+  application:
+    name: produce1
+  #时间戳配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+eureka:
+  client:
+  #是否拉取服务列表
+    fetch-registry: true
+    #注册到eureka
+    register-with-eureka: true
+    service-url: 
+      defaultZone: http://localhost:8001/eureka
