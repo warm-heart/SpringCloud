@@ -4,6 +4,7 @@ package com.micro.commons.util;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 
 /**
@@ -137,6 +138,27 @@ public class DateUtils {
     }
 
     /**
+     * 时间的 周一
+     *
+     * @param time
+     * @return
+     */
+    public final static LocalDateTime firstDayOfWeek(LocalDateTime time ) {
+        return time.with(DayOfWeek.MONDAY);
+
+    }
+
+    /**
+     * 时间的 周末
+     *
+     * @param time
+     * @return
+     */
+    public final static LocalDateTime lastDayOfWeek(LocalDateTime time) {
+        return time.with(DayOfWeek.SUNDAY);
+    }
+
+    /**
      * 获取一个月的最后一天
      *
      * @param localDateTime
@@ -250,10 +272,10 @@ public class DateUtils {
 //        LocalDate ldt3 = stringConvertToDateTime3("2020年07月15日");
 //        System.err.println(ldt3);
 //        System.err.println(localDateConvertToLocalDateTime(ldt2));
-        LocalDateTime localDateTime = LocalDateTime
-                .of(1997, 12, 21, 0, 7);
-
-        Period period = calculationTime(localDateTime, LocalDateTime.now());
+//         LocalDateTime localDateTime = LocalDateTime
+//                 .of(1997, 12, 21, 0, 7);
+//
+//         Period period = calculationTime(localDateTime, LocalDateTime.now());
 
 
     }
