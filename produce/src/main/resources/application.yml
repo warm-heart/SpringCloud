@@ -1,5 +1,4 @@
 
-
 server:
   port: 8100
 spring:
@@ -49,4 +48,16 @@ mybatis:
   mapper-locations: classpath:/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
+redis:
+  config:
+    maxIdle: 300
+    maxTotal: 1000
+    maxWaitMillis: 1000
+    numTestsPerEvictionRun: 1024
+    timeBetweenEvictionRunsMillis: 30000
+    testOnBorrow: true
+    testWhileIdle: true
+    minRandomTimeout: 2
+    maxRandomTimeout: 5
 

@@ -53,7 +53,7 @@
         </dependency>
         <dependency>
             <groupId>com.warm.heart</groupId>
-            <artifactId>redis-spring-boot-starter</artifactId>
+            <artifactId>service-spring-boot-starter</artifactId>
             <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
