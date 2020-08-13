@@ -82,7 +82,8 @@ public class RedisServiceTest extends ProduceApplicationTests {
         log.info("总共人数:{}", exec);
         log.info("抢购失败的人数：{}", fail);
         log.info("抢购成功的人数：{}", succ);
-        //本地机器 100000个耗时19s 50000个8.9s
+        //本地机器 100000个耗时16s - 19s 50000个8.9s  cpu I5 4200H
+        // todo 上服务器测试
         log.info("总共耗时：{}", System.currentTimeMillis() - start);
     }
 
