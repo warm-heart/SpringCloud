@@ -7,7 +7,7 @@ spring:
   datasource:
     druid:
       username: root
-      password: 1=Ssummer
+      password: 1122
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://127.0.0.1:3306/springboot_master?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
       initial-size: 1
@@ -32,10 +32,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  redis:
-    host: 127.0.0.1
-    password:
-    port: 6379
+#  redis:
+#    host: 127.0.0.1
+#    password:
+#    port: 6379
 #    host: 39.97.117.248
 #    password: Ssummer
 #    port: 6380
