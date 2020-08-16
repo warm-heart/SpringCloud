@@ -51,10 +51,14 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.warm.heart</groupId>-->
+        <!--            <artifactId>service-spring-boot-starter</artifactId>-->
+        <!--            <version>1.0.0-RELEASE</version>-->
+        <!--        </dependency>-->
         <dependency>
-            <groupId>com.warm.heart</groupId>
-            <artifactId>service-spring-boot-starter</artifactId>
-            <version>1.0.0-RELEASE</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

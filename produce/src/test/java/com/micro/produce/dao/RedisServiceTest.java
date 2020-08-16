@@ -2,14 +2,15 @@ package com.micro.produce.dao;
 
 import com.micro.commons.util.IDUtils;
 import com.micro.produce.ProduceApplicationTests;
-import com.warm.heart.redis.service.RedisService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
+
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,24 +29,22 @@ import java.util.concurrent.atomic.LongAdder;
 public class RedisServiceTest extends ProduceApplicationTests {
 
     @Autowired
-    private RedisService redisService;
-    @Autowired
     RedisTemplate redisTemplate;
 
     private static Integer count = 100;
     private static Integer succ = 0;
     private static AtomicInteger exec = new AtomicInteger(0);
     private static AtomicInteger fail = new AtomicInteger(0);
-    CountDownLatch countDownLatch = new CountDownLatch(100000);
+    CountDownLatch countDownLatch = new CountDownLatch(10000);
 
     private static String productId = "productId";
 
-    @Test
-    public void redis() {
-        redisService.putForString("name", "111", 1L);
-        String value = (String) redisService.getForString("name");
-        System.err.println(value);
-    }
+    // @Test
+    // public void redis() {
+    //     redisService.putForString("name", "111", 1L);
+    //     String value = (String) redisService.getForString("name");
+    //     System.err.println(value);
+    // }
 
     @Test
     public void redisLock() throws InterruptedException {
@@ -53,35 +52,37 @@ public class RedisServiceTest extends ProduceApplicationTests {
                 new ArrayBlockingQueue<Runnable>(50000), new ThreadPoolExecutor.CallerRunsPolicy());
 
         Long start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10000; i++) {
             executor.execute(() -> {
-                exec.incrementAndGet();
+                // exec.incrementAndGet();
                 String value = String.valueOf(IDUtils.genId());
                 if (getLock(productId, value)) {
                     try {
-                        if (count > 0) {
-                            count--;
-                            succ++;
-                        } else {
-                            //获取锁成功但是库存小于0
-                             fail.incrementAndGet();
-                        }
+                        // if (count > 0) {
+                        //     count--;
+                        //     succ++;
+                        // } else {
+                        //     //获取锁成功但是库存小于0
+                        //      fail.incrementAndGet();
+                        // }
+                    } catch (Exception e) {
+                        log.error("{异常}", e);
                     } finally {
                         releaseLock(productId, value);
                     }
                 } else {
                     //获取锁失败
-                    fail.incrementAndGet();
+                    // fail.incrementAndGet();
                 }
                 countDownLatch.countDown();
             });
         }
         countDownLatch.await();
-        executor.shutdown();
-        log.info("剩余库存:{}", count);
-        log.info("总共人数:{}", exec);
-        log.info("抢购失败的人数：{}", fail);
-        log.info("抢购成功的人数：{}", succ);
+        // executor.shutdown();
+        // log.info("剩余库存:{}", count);
+        // log.info("总共人数:{}", exec);
+        // log.info("抢购失败的人数：{}", fail);
+        // log.info("抢购成功的人数：{}", succ);
         //本地机器 100000个耗时16s - 19s 50000个8.9s  cpu I5 4200H
         // todo 上服务器测试
         log.info("总共耗时：{}", System.currentTimeMillis() - start);
@@ -105,7 +106,7 @@ public class RedisServiceTest extends ProduceApplicationTests {
 
     @Test
     public void releaseLockTest() {
-        // redisTemplate.opsForValue().set("name","111");
+        redisTemplate.opsForValue().set("name", "222");
         boolean res = releaseLock("name", "222");
         System.err.println(res);
     }
