@@ -52,8 +52,8 @@ public class RateLimiterGatewayFilterFactory extends
             log.info("进入限流器");
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
-            log.info("{}", request.getPath());
-            log.info("{}", request.getHeaders().getFirst("token"));
+            log.info("path :{}", request.getPath());
+            log.info("token :{}", request.getHeaders().getFirst("token"));
             boolean suc = rateLimiter.tryAcquire(config.permits);
             if (!suc) {
                 response.setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
