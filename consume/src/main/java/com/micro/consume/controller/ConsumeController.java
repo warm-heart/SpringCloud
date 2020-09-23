@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author wangqianlong
  * @create 2020-04-22 10:50
@@ -28,8 +30,9 @@ public class ConsumeController {
      * @return
      */
     @RequestMapping("feignGet")
-    public ApiResponse<User> feignGet(String userID) {
+    public ApiResponse<User> feignGet(String userID, HttpServletRequest request) {
         log.info("进入消费端controller ，参数：{}", userID);
+        log.info("token：{}", request.getHeader("token"));
         return produceFeignService.get(userID);
     }
 

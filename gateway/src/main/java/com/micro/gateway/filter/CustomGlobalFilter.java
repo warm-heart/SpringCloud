@@ -29,7 +29,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         HttpHeaders httpHeaders = request.getHeaders();
         //获取http header数据，可以权限鉴定用
         String token=httpHeaders.getFirst("token");
-        //System.err.println(token);
+        log.info("{}", request.getHeaders().getFirst("token"));
         //获取request里的数据
         String jwt=request.getQueryParams().getFirst("jwt");
        // System.err.println(jwt);

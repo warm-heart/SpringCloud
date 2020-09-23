@@ -22,7 +22,7 @@ public class ProduceController {
     ProduceService produceService;
 
     @RequestMapping("/get")
-    public ApiResponse<User> get(@RequestParam String userId) {
+    public ApiResponse<User> get(@RequestParam String userId,HttpServletRequest request) {
 //        try {
 //            Thread.sleep(2000);
 //        } catch (InterruptedException e) {
@@ -30,7 +30,9 @@ public class ProduceController {
 //        }
 
         log.info("进入生产端controller，参数：{}", userId);
-        return produceService.get(userId);
+//        return produceService.get(userId);
+        System.err.println(request.getHeader("token"));
+        return  ApiResponse.success(new User());
     }
 
     @RequestMapping("/user/get1")

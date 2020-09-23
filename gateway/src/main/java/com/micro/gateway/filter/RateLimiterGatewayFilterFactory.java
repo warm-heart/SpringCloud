@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
+
 import static java.util.Collections.singletonList;
 
 /**
@@ -50,7 +52,8 @@ public class RateLimiterGatewayFilterFactory extends
             log.info("进入限流器");
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
-           log.info("{}",request.getPath());
+            log.info("{}", request.getPath());
+            log.info("{}", request.getHeaders().getFirst("token"));
             boolean suc = rateLimiter.tryAcquire(config.permits);
             if (!suc) {
                 response.setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
