@@ -132,7 +132,7 @@ ribbon:
   #重试负载均衡其他的实例最大重试次数,不包括首次调用
   MaxAutoRetriesNextServer: 2
 
-  #总的重试次数为 （MaxAutoRetries+1）*（MaxAutoRetriesNextServer+1）次
+  #总的重试次数为 （MaxAutoRetries+1）*（MaxAutoRetriesNextServer+1）次，所以要保证微服务调用下的幂等性，每个接口都要保证幂等性
   #所有请求都重试 get post
   OkToRetryOnAllOperations: true
   NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RandomRule
