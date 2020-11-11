@@ -32,6 +32,11 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+#  #设置为false 默认使用jdk动态代理
+#  aop:
+#    proxy-target-class: false
+
+
 #  redis:
 #    host: 127.0.0.1
 #    password:
@@ -69,5 +74,6 @@ mybatis:
 #    testWhileIdle: true
 #    minRandomTimeout: 2
 #    maxRandomTimeout: 5
+
 
 
