@@ -14,6 +14,7 @@ class CommonsApplicationTests {
     @Test
     void contextLoads() {
         List list = solution(100, 10);
+        System.err.println(list);
     }
 
 
