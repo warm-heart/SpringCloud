@@ -11,8 +11,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ProduceFallback implements ProduceFeignService {
+
+
     @Override
-    public ApiResponse<User> get(String name) {
+    public ApiResponse<User> get(String userId) {
         return ApiResponse.error("produce服务降级");
     }
 

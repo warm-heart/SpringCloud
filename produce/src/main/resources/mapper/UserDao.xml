@@ -14,15 +14,14 @@
 
    </select>
 
-   <insert id="insert" parameterType="com.micro.commons.entity.User">
+    <insert id="insert" parameterType="com.micro.commons.entity.User">
        insert into user(userId, userName, password, CreateTime)
-       values (userId,userName,password,CreateTime)
+       values (#{userId},#{userName},#{password},#{CreateTime})
    </insert>
 
     <update id="update" parameterType="com.micro.commons.entity.User">
         update user set userName=#{userName},password=#{password} where userId=#{userId}
     </update>
-
 
 
 </mapper>
