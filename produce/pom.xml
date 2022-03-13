@@ -61,8 +61,9 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.redission</groupId>
-            <artifactId>redission-spring-boot-starter</artifactId>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.16.8</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
