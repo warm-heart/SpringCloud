@@ -2,6 +2,7 @@ package com.micro.commons.dto;
 
 
 import com.micro.commons.enums.ResultEnum;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 //@Data
 //@JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
 public class ApiResponse<T> implements Serializable {
 
 
