@@ -32,10 +32,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-#  cloud:
-#    nacos:
-#      discovery:
-#        server-addr: 127.0.0.1:8848
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
 #  #设置为false 默认使用jdk动态代理
 #  aop:
 #    proxy-target-class: false
@@ -52,14 +52,14 @@ spring:
 
 
 
-eureka:
-  client:
-    #是否拉取服务列表
-    fetch-registry: true
-    #注册到eureka
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:8001/eureka
+#eureka:
+#  client:
+#    #是否拉取服务列表
+#    fetch-registry: true
+#    #注册到eureka
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://localhost:8001/eureka
 
 #mybatis配置
 mybatis:

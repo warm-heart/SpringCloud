@@ -34,15 +34,19 @@ spring:
     time-zone: GMT+8
 
 
-
-eureka:
-  client:
-    #是否拉取服务列表
-    fetch-registry: true
-    #注册到eureka
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:8001/eureka
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+#
+#eureka:
+#  client:
+#    #是否拉取服务列表
+#    fetch-registry: true
+#    #注册到eureka
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://localhost:8001/eureka
 
 
 
@@ -113,7 +117,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 3000
+            timeoutInMilliseconds: 300000
     "ProduceFeignService#getBypath(String)":
       execution:
         isolation:
@@ -135,17 +139,18 @@ ribbon:
   #总的重试次数为 （MaxAutoRetries+1）*（MaxAutoRetriesNextServer+1）次，所以要保证微服务调用下的幂等性，每个接口都要保证幂等性
   #所有请求都重试 get post
   OkToRetryOnAllOperations: true
-  NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RandomRule
+  NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RoundRobinRule
 
 
-#针对单个服务的配置 服务名开头（application.name的名称）
-produce:
-  ribbon:
-    ReadTimeout: 1500
-    ConnectTimeout: 1500
-    MaxAutoRetries: 1
-    MaxAutoRetriesNextServer: 0
-    #NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RandomRule
+##针对单个服务的配置 服务名开头（application.name的名称）
+#produce:
+#  ribbon:
+#    ReadTimeout: 1500
+#    ConnectTimeout: 1500
+#    MaxAutoRetries: 1
+#    MaxAutoRetriesNextServer: 0
+##    NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RoundRobinRule
+##    NFLoadBalancerRuleClassName: com.netfilx.loadbalancer.RoundRobinRule
 logging:
   level:
     com.netflix.loadbalancer: debug
