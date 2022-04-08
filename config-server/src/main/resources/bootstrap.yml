@@ -1,0 +1,11 @@
+ip: 1.15.19.68
+
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: ${ip}:8848
+        namespace: config-test
+#        file-extension: yml
+  application:
+    name: config-server

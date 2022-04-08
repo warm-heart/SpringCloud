@@ -1,3 +1,6 @@
+
+ip: 1.15.19.68
+
 server:
   port: 8100
 spring:
@@ -35,19 +38,16 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: ${ip}:8848
 #  #设置为false 默认使用jdk动态代理
 #  aop:
 #    proxy-target-class: false
 
 
-#  redis:
-#    host: 127.0.0.1
-#    password:
-#    port: 6379
-#    host: 39.97.117.248
-#    password: Ssummer
-#    port: 6380
+  redis:
+    host: ${ip}
+    password: 158262751
+    port: 6379
 
 
 
