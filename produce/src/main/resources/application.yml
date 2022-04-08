@@ -38,6 +38,11 @@ spring:
     nacos:
       discovery:
         server-addr: ${ip}:8848
+  redis:
+    host: ${ip}
+    password: 158262751
+    port: 6379
+    database: 15
 #  #设置为false 默认使用jdk动态代理
 #  aop:
 #    proxy-target-class: false
