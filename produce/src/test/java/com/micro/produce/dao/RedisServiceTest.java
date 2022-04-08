@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,9 @@ public class RedisServiceTest extends ProduceApplicationTests {
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     private static Integer count = 100;
     private static Integer succ = 0;
@@ -111,5 +115,11 @@ public class RedisServiceTest extends ProduceApplicationTests {
         System.err.println(res);
     }
 
+
+
+    @Test
+    public void test() {
+        stringRedisTemplate.opsForValue().set("namexwz", "xwz");
+    }
 
 }

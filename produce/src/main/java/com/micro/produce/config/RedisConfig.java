@@ -3,6 +3,7 @@ package com.micro.produce.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -28,11 +29,22 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
+
+    @Value("${redis.host}")
+    private String hostName;
+
+    @Value("${redis.password}")
+    private String password;
+
+    @Value("${redis.port}")
+    private int port;
+
+    @Value("${redis.database}")
+    private int database;
+
     @Bean
     public JedisPoolConfig jedisPoolConfig() {
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-
-        return jedisPoolConfig;
+        return new JedisPoolConfig();
     }
 
 
@@ -40,9 +52,10 @@ public class RedisConfig {
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) {
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("127.0.0.1");
-        redisStandaloneConfiguration.setPort(6379);
-        redisStandaloneConfiguration.setPassword(RedisPassword.none());
+        redisStandaloneConfiguration.setHostName(hostName);
+        redisStandaloneConfiguration.setPort(port);
+        redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
+        redisStandaloneConfiguration.setDatabase(database);
 
 
         JedisClientConfiguration jedisClientConfiguration = JedisClientConfiguration.builder().usePooling().
