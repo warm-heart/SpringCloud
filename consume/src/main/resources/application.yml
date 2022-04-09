@@ -1,3 +1,6 @@
+
+ip: 1.15.19.68
+
 server:
   port: 8200
 spring:
@@ -154,6 +157,9 @@ ribbon:
 logging:
   level:
     com.netflix.loadbalancer: debug
+rocketmq:
+  name-server: ${ip}
+
 
 
 
