@@ -5,8 +5,12 @@ import com.micro.commons.entity.User;
 import com.micro.consume.feign.produce.ProduceFeignService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @SpringBootTest
 class ConsumeApplicationTests {
@@ -21,5 +25,49 @@ class ConsumeApplicationTests {
         System.err.println(res);
     }
 
+    @Test
+    void partition() {
+
+        List<String> strings = new ArrayList<>(100000000);
+        for (int i = 0; i < 100000000; i++) {
+            strings.add(String.valueOf(i));
+        }
+        Integer size = 50;
+        Long start = System.currentTimeMillis();
+        List<List<String>> res = doPartition(strings, size);
+
+        Long current = System.currentTimeMillis();
+        System.err.println("size=" + res.size() + "------" + "耗时=" + (current - start));
+    }
+
+
+    private List<List<String>> doPartition(List<String> elements,
+                                           Integer size) {
+        if (CollectionUtils.isEmpty(elements)) {
+            return Collections.emptyList();
+        }
+        if (elements.size() <= size) {
+            return Collections.singletonList(elements);
+        }
+
+        int start = 0;
+        int count = elements.size() % size == 0 ? elements.size() / size : elements.size() / size + 1;
+        List<List<String>> res = new ArrayList<>(count);
+        for (int i = 0; i <= count; i++) {
+            List<String> partitionElements = new ArrayList<>();
+            int end = size;
+            //剩余元素数
+            int surplusElement = elements.size() - 1 - start;
+            if (surplusElement < size) {
+                end = surplusElement;
+            }
+            for (int j = start; j < end; j++) {
+                partitionElements.add(elements.get(j));
+            }
+            start += size;
+            res.add(partitionElements);
+        }
+        return res;
+    }
 
 }

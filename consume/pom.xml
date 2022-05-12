@@ -32,6 +32,17 @@
             <version>2.2.6.RELEASE</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>org.apache.skywalking</groupId>-->
+<!--            <artifactId>skywalking-trace-receiver-plugin</artifactId>-->
+<!--            <version>8.9.1</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.skywalking</groupId>-->
+<!--            <artifactId>skywalking-sharing-server-plugin</artifactId>-->
+<!--            <version>8.9.1</version>-->
+<!--        </dependency>-->
+
         <!--rocketmq-->
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
