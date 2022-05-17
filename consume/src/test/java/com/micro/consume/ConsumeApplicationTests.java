@@ -42,29 +42,30 @@ class ConsumeApplicationTests {
 
 
     private List<List<String>> doPartition(List<String> elements,
-                                           Integer size) {
+                                           Integer partitionSize) {
         if (CollectionUtils.isEmpty(elements)) {
             return Collections.emptyList();
         }
-        if (elements.size() <= size) {
+        if (elements.size() <= partitionSize) {
             return Collections.singletonList(elements);
         }
 
+        //游标，不断增长
         int start = 0;
-        int count = elements.size() % size == 0 ? elements.size() / size : elements.size() / size + 1;
+        int count = elements.size() % partitionSize == 0 ? elements.size() / partitionSize : elements.size() / partitionSize + 1;
         List<List<String>> res = new ArrayList<>(count);
         for (int i = 0; i <= count; i++) {
             List<String> partitionElements = new ArrayList<>();
-            int end = size;
+            int end = partitionSize;
             //剩余元素数
             int surplusElement = elements.size() - 1 - start;
-            if (surplusElement < size) {
+            if (surplusElement < partitionSize) {
                 end = surplusElement;
             }
             for (int j = start; j < end; j++) {
                 partitionElements.add(elements.get(j));
             }
-            start += size;
+            start += partitionSize;
             res.add(partitionElements);
         }
         return res;
