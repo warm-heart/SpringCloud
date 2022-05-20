@@ -16,26 +16,49 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         //获取客户端发送过来的消息
-//        ByteBuf byteBuf = (ByteBuf) msg;
-//        System.out.println("收到客户端" + ctx.channel().remoteAddress() + "发送的消息：" + byteBuf.toString(CharsetUtil.UTF_8));
+        ByteBuf byteBuf = (ByteBuf) msg;
+        System.out.println("收到客户端" + ctx.channel().remoteAddress() + "发送的消息：" + byteBuf.toString(CharsetUtil.UTF_8));
 
-
-        //获取到线程池eventLoop，添加线程，执行
-        ctx.channel().eventLoop().execute(() -> {
+        new Thread(() -> {
             try {
-                //长时间操作，不至于长时间的业务操作导致Handler阻塞
-                Thread.sleep(1000);
-                System.out.println("长时间的业务处理");
-            } catch (Exception e) {
+                Thread.sleep(3000L);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
+            System.err.println("服务端异步线程开始执行-----");
+
+            ctx.channel()
+                    .writeAndFlush(Unpooled.copiedBuffer("服务端延时往客户端再发一次消息", CharsetUtil.UTF_8));
+        }).start();
+
+//        //获取到线程池eventLoop（bossGroup），添加线程，执行
+//        ctx.channel().eventLoop().execute(() -> {
+//            try {
+//                //长时间操作，不至于长时间的业务操作导致Handler阻塞
+//                Thread.sleep(1000);
+//                System.out.println("长时间的业务处理");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         //发送消息给客户端
-        ctx.writeAndFlush(Unpooled.copiedBuffer("服务端已收到消息，并给你发送一个问号?", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("服务端已收到消息，并给你发送一个ack", CharsetUtil.UTF_8));
+    }
+
+
+    /**
+     * 连接关闭事件
+     *
+     * @param ctx
+     */
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        //发送消息给客户端
+        System.err.println("连接关闭");
     }
 
     @Override
