@@ -53,7 +53,7 @@ public class ScheduleTask {
 
     public void run() {
         Runnable task = new Thread(() -> {
-            log.info("异步线程");
+            log.info("服务端异步线程发送消息");
             List<ChannelHandlerContext> channelHandlerContexts = getAllChannelHandlerContext();
             channelHandlerContexts.forEach(this::sendMessage);
         });

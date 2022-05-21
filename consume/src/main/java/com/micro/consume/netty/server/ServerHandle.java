@@ -4,15 +4,18 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自定义的Handler需要继承Netty规定好的HandlerAdapter
  * 才能被Netty框架所关联，有点类似SpringMVC的适配器模式
  **/
+@Slf4j
 public class ServerHandle extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        log.info("服务端channelRead");
         //获取客户端发送过来的消息
         ByteBuf byteBuf = (ByteBuf) msg;
         System.out.println("收到客户端" + ctx.channel().remoteAddress() + "发送的消息：" + byteBuf.toString(CharsetUtil.UTF_8));
@@ -37,6 +40,7 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        log.info("服务端channelActive");
         String channelId = ctx.channel().id().asLongText();
         ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
     }
@@ -49,7 +53,7 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         //发送消息给客户端
-        System.err.println("连接关闭");
+        log.info("服务端channelInactive");
         //todo 移除连接
         //ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
     }
@@ -60,5 +64,10 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
         ctx.close();
         //todo 移除连接
         //ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
+    }
+
+    @Override
+    public void channelWritabilityChanged(ChannelHandlerContext ctx) throws Exception {
+        super.channelWritabilityChanged(ctx);
     }
 }

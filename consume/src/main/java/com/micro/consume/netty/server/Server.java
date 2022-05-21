@@ -45,6 +45,7 @@ public class Server {
                             //给pipeline管道设置处理器
                             socketChannel.pipeline()
                                     .addFirst(new DecodeHandle())
+                                    .addFirst(new ServerOutHandle())
                                     .addLast(new ServerHandle());
                         }
                     });//给workerGroup的EventLoop对应的管道设置处理器
@@ -53,7 +54,7 @@ public class Server {
             ChannelFuture channelFuture = bootstrap.bind(6666).sync();
 
             //启动定时任务
-//            ScheduleTask.getScheduleTask().run();
+            ScheduleTask.getScheduleTask().run();
             //对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {
