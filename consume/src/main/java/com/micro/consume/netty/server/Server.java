@@ -43,7 +43,9 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             //给pipeline管道设置处理器
-                            socketChannel.pipeline().addLast(new ServerHandle());
+                            socketChannel.pipeline()
+                                    .addFirst(new DecodeHandle())
+                                    .addLast(new ServerHandle());
                         }
                     });//给workerGroup的EventLoop对应的管道设置处理器
             System.out.println("服务端已经准备就绪...");
@@ -51,7 +53,7 @@ public class Server {
             ChannelFuture channelFuture = bootstrap.bind(6666).sync();
 
             //启动定时任务
-            ScheduleTask.getScheduleTask().run();
+//            ScheduleTask.getScheduleTask().run();
             //对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {
