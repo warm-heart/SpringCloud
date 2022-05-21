@@ -1,4 +1,4 @@
-package com.micro.consume.netty;
+package com.micro.consume.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
