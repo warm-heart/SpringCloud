@@ -34,10 +34,14 @@ public class Server {
                     //设置线程队列得到连接个数
                     //option()设置的是服务端用于接收进来的连接，也就是boosGroup线程。
                     .option(ChannelOption.SO_BACKLOG, 128)
+                    .option(ChannelOption.SO_REUSEADDR, true)
+                    .option(ChannelOption.SO_KEEPALIVE, false)
                     //设置保持活动连接状态
                     // childOption()是提供给父管道接收到的连接，也就是workerGroup线程。
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childOption(ChannelOption.SO_RCVBUF, 10240)
+                    //tcp 优化
+                    .childOption(ChannelOption.TCP_NODELAY, true)
                     //使用匿名内部类的形式初始化通道对象
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
