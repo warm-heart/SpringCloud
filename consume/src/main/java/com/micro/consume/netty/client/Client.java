@@ -1,14 +1,12 @@
 package com.micro.consume.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
 
 /**
  * @author wangqianlong
@@ -39,17 +37,17 @@ public class Client {
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 6666).sync();
             this.channelFuture = channelFuture;
             //对通道关闭进行监听
-            new Thread(() -> {
-                try {
-                    Thread.sleep(3000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.err.println("异步线程");
-
-                channelFuture.channel()
-                        .writeAndFlush(Unpooled.copiedBuffer("客户端往服务端再发一次消息", CharsetUtil.UTF_8));
-            }).start();
+//            new Thread(() -> {
+//                try {
+//                    Thread.sleep(3000L);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                System.err.println("异步线程");
+//
+//                channelFuture.channel()
+//                        .writeAndFlush(Unpooled.copiedBuffer("客户端往服务端再发一次消息", CharsetUtil.UTF_8));
+//            }).start();
             channelFuture.channel().closeFuture().sync();
 
             //添加监听器

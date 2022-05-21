@@ -49,6 +49,9 @@ public class Server {
             System.out.println("服务端已经准备就绪...");
             //绑定端口号，启动服务端
             ChannelFuture channelFuture = bootstrap.bind(6666).sync();
+
+            //启动定时任务
+            ScheduleTask.getScheduleTask().run();
             //对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {

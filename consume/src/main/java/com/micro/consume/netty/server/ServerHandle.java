@@ -1,7 +1,6 @@
 package com.micro.consume.netty.server;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
@@ -18,10 +17,6 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
         ByteBuf byteBuf = (ByteBuf) msg;
         System.out.println("收到客户端" + ctx.channel().remoteAddress() + "发送的消息：" + byteBuf.toString(CharsetUtil.UTF_8));
 
-
-        String channelId = ctx.channel().id().asLongText();
-        ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
-
 //        //获取到线程池eventLoop（bossGroup），添加线程，执行
 //        ctx.channel().eventLoop().execute(() -> {
 //            try {
@@ -37,9 +32,14 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         //发送消息给客户端
-        ctx.writeAndFlush(Unpooled.copiedBuffer("服务端已收到消息，并给你发送一个ack", CharsetUtil.UTF_8));
+        // ctx.writeAndFlush(Unpooled.copiedBuffer("服务端已收到消息，并给你发送一个ack", CharsetUtil.UTF_8));
     }
 
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        String channelId = ctx.channel().id().asLongText();
+        ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
+    }
 
     /**
      * 连接关闭事件
@@ -50,11 +50,15 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) {
         //发送消息给客户端
         System.err.println("连接关闭");
+        //todo 移除连接
+        //ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         //发生异常，关闭通道
         ctx.close();
+        //todo 移除连接
+        //ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
     }
 }
