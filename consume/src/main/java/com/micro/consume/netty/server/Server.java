@@ -18,7 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 public class Server {
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InterruptedException {
+        main0();
+    }
+
+
+    private static void main0() throws InterruptedException {
         //创建两个线程组 boosGroup、workerGroup
         //bossGroup 用于监听客户端连接，专门负责与客户端创建连接，并把连接注册到workerGroup的Selector中。
         //workerGroup用于处理每一个连接发生的读写事件。

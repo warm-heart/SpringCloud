@@ -53,9 +53,12 @@ public class ScheduleTask {
 
     public void run() {
         Runnable task = new Thread(() -> {
-            log.info("服务端异步线程发送消息");
-            List<ChannelHandlerContext> channelHandlerContexts = getAllChannelHandlerContext();
-            channelHandlerContexts.forEach(this::sendMessage);
+            try {
+                List<ChannelHandlerContext> channelHandlerContexts = getAllChannelHandlerContext();
+                channelHandlerContexts.forEach(this::sendMessage);
+            } catch (Throwable e) {
+                log.error("sendMessage exception", e);
+            }
         });
         //只运行一次
         //scheduledExecutorService.schedule(task);
