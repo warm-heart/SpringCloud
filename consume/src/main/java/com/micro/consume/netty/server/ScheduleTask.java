@@ -5,14 +5,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * 服务端定时向客户端发送消息
@@ -94,27 +93,13 @@ public class ScheduleTask {
         CHANNEL_HANDLER_CONTEXT_MAP.remove(channelId);
     }
 
-
-    /**
-     * 获取连接
-     *
-     * @param channelId //
-     * @return //
-     */
-    public ChannelHandlerContext getChannelHandlerContext(String channelId) {
-        return CHANNEL_HANDLER_CONTEXT_MAP.get(channelId);
-    }
-
     /**
      * 获取所有连接
      *
      * @return //
      */
     public List<ChannelHandlerContext> getAllChannelHandlerContext() {
-
-        return CHANNEL_HANDLER_CONTEXT_MAP.values().stream()
-                .map(Function.identity())
-                .collect(Collectors.toList());
+        return new ArrayList<>(CHANNEL_HANDLER_CONTEXT_MAP.values());
     }
 
 }

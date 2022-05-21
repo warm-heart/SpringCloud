@@ -48,22 +48,22 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     /**
      * 连接关闭事件
      *
-     * @param ctx
+     * @param ctx //
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         //发送消息给客户端
         log.info("服务端channelInactive");
-        //todo 移除连接
-        //ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
+        String channelId = ctx.channel().id().asLongText();
+        ScheduleTask.getScheduleTask().removeChannelHandlerContext(channelId);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         //发生异常，关闭通道
         ctx.close();
-        //todo 移除连接
-        //ScheduleTask.getScheduleTask().addChannelHandlerContext(channelId, ctx);
+        String channelId = ctx.channel().id().asLongText();
+        ScheduleTask.getScheduleTask().removeChannelHandlerContext(channelId);
     }
 
     @Override
