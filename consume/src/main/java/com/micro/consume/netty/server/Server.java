@@ -56,8 +56,8 @@ public class Server {
                         protected void initChannel(SocketChannel socketChannel) {
                             //给pipeline管道设置处理器
                             socketChannel.pipeline()
-                                    //连接管理处理器
-                                    .addLast(new IdleStateHandler(5, 5, 5))
+                                    //连接管理处
+                                    .addLast(new IdleStateHandler(0, 0, 5))
                                     .addLast(new DecodeHandle())
                                     .addLast(new ServerOutHandle())
                                     .addLast(new ServerHandle());

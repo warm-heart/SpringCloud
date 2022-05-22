@@ -1,11 +1,15 @@
 package com.micro.consume.netty.server;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.SocketAddress;
 
 /**
  * 自定义的Handler需要继承Netty规定好的HandlerAdapter
@@ -73,13 +77,36 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
         // 当连接空闲时间太长时，将会触发一个 IdleStateEvent 事件
-        IdleStateEvent event = (IdleStateEvent) evt;
-//        event.state()
-        String channelId = ctx.channel().id().asLongText();
-        ctx.channel().close();
-        log.info(channelId + "------连接空闲时间太长，IdleStateEvent事件------");
-        // super.userEventTriggered(ctx, evt);
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent event = (IdleStateEvent) evt;
+            if (event.state().equals(IdleState.ALL_IDLE)) {
+                final String remoteAddress = parseChannelRemoteAddr(ctx.channel());
+                log.info(remoteAddress + "------连接空闲时间太长，IdleStateEvent事件------");
+                ctx.channel().close();
+            }
+        }
+        ctx.fireUserEventTriggered(evt);
     }
+
+
+    //---------------私有方法分界线-------------
+
+
+    public static String parseChannelRemoteAddr(Channel channel) {
+        if (null == channel) {
+            return "";
+        } else {
+            SocketAddress remote = channel.remoteAddress();
+            String addr = remote != null ? remote.toString() : "";
+            if (addr.length() > 0) {
+                int index = addr.lastIndexOf("/");
+                return index >= 0 ? addr.substring(index + 1) : addr;
+            } else {
+                return "";
+            }
+        }
+    }
+
 }
