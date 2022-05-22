@@ -8,6 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -36,11 +39,11 @@ public class Server {
             bootstrap.group(bossGroup, workerGroup)
                     //设置服务端通道实现类型
                     .channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.ERROR))
                     //设置线程队列得到连接个数
                     //option()设置的是服务端用于接收进来的连接，也就是boosGroup线程。
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .option(ChannelOption.SO_REUSEADDR, true)
-                    .option(ChannelOption.SO_KEEPALIVE, false)
                     //设置保持活动连接状态
                     // childOption()是提供给父管道接收到的连接，也就是workerGroup线程。
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
@@ -53,8 +56,10 @@ public class Server {
                         protected void initChannel(SocketChannel socketChannel) {
                             //给pipeline管道设置处理器
                             socketChannel.pipeline()
-                                    .addFirst(new DecodeHandle())
-                                    .addFirst(new ServerOutHandle())
+                                    //连接管理处理器
+                                    .addLast(new IdleStateHandler(5, 5, 5))
+                                    .addLast(new DecodeHandle())
+                                    .addLast(new ServerOutHandle())
                                     .addLast(new ServerHandle());
                         }
                     });//给workerGroup的EventLoop对应的管道设置处理器
@@ -63,7 +68,7 @@ public class Server {
             ChannelFuture channelFuture = bootstrap.bind(6666).sync();
 
             //启动定时任务
-            ScheduleTask.getScheduleTask().run();
+//            ScheduleTask.getScheduleTask().run();
             //对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {

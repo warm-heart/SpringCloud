@@ -3,6 +3,7 @@ package com.micro.consume.netty.server;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -69,5 +70,16 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelWritabilityChanged(ChannelHandlerContext ctx) throws Exception {
         super.channelWritabilityChanged(ctx);
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        // 当连接空闲时间太长时，将会触发一个 IdleStateEvent 事件
+        IdleStateEvent event = (IdleStateEvent) evt;
+//        event.state()
+        String channelId = ctx.channel().id().asLongText();
+        ctx.channel().close();
+        log.info(channelId + "------连接空闲时间太长，IdleStateEvent事件------");
+        // super.userEventTriggered(ctx, evt);
     }
 }
