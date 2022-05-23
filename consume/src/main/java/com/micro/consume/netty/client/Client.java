@@ -7,6 +7,10 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 /**
  * @author wangqianlong
@@ -29,7 +33,15 @@ public class Client {
                         @Override
                         protected void initChannel(SocketChannel ch) {
                             //添加客户端通道的处理器
-                            ch.pipeline().addLast(new ClientHandler());
+                            ch.pipeline()
+                                    //拆包解码
+                                    //.addLast(new ProtobufVarint32FrameDecoder())
+                                   // .addLast(new ProtobufDecoder(CIMResponseProto.CIMResProtocol.getDefaultInstance()))
+                                    //拆包编码
+                                    //.addLast(new ProtobufVarint32LengthFieldPrepender())
+                                    //.addLast(new ProtobufEncoder())
+                                    //业务处理器
+                                    .addLast(new ClientHandler());
                         }
                     });
             System.out.println("客户端准备就绪，随时可以起飞~");
