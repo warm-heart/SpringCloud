@@ -1,10 +1,7 @@
 package com.micro.consume.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -48,6 +45,7 @@ public class Server {
                     // childOption()是提供给父管道接收到的连接，也就是workerGroup线程。
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childOption(ChannelOption.SO_RCVBUF, 10240)
+                    .childOption(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(16,16,1024))
                     //tcp 优化
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     //使用匿名内部类的形式初始化通道对象

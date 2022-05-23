@@ -19,6 +19,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         //发送消息到服务端
         ctx.writeAndFlush(Unpooled.copiedBuffer("客户端连接到服务端事件消息；" +
                 "你好服务端，我是客户端", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("第二", CharsetUtil.UTF_8));
     }
 
     @Override
