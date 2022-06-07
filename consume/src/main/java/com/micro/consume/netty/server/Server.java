@@ -27,7 +27,7 @@ public class Server {
         //创建两个线程组 boosGroup、workerGroup
         //bossGroup 用于监听客户端连接，专门负责与客户端创建连接，并把连接注册到workerGroup的Selector中。
         //workerGroup用于处理每一个连接发生的读写事件。
-        EventLoopGroup bossGroup = new NioEventLoopGroup(100);
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup(5);
         try {
             //创建服务端的启动对象，设置参数
