@@ -46,10 +46,10 @@ public class Apm {
             }
 
             try {
-                //借助JavaAssist工具，进行字节码插桩
-                ClassPool pool = ClassPool.getDefault();
-                CtClass cc = pool.get("com.micro.produce.controller.ProduceController");
-                CtMethod personFly = cc.getDeclaredMethod("get");
+                //借助JavaAssist工具，进行字节码重写
+                ClassPool classPool = ClassPool.getDefault();
+                CtClass cc = classPool.get("com.micro.produce.controller.ProduceController");
+                CtMethod personFly = cc.getDeclaredMethod("get111");
 
                 //在目标方法前后，插入代码
                 personFly.insertBefore("System.out.println(\"--- apm before get ---\");");

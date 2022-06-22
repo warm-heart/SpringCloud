@@ -5,7 +5,6 @@ import com.micro.commons.entity.User;
 import com.micro.produce.service.ProduceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ public class ProduceController {
     ProduceService produceService;
 
     @RequestMapping("/get")
-    public ApiResponse<User> get(@RequestParam String userId,HttpServletRequest request) {
+    public ApiResponse<User> get111(@RequestParam String userId, HttpServletRequest request) {
 //        try {
 //            Thread.sleep(2000);
 //        } catch (InterruptedException e) {
@@ -31,8 +30,8 @@ public class ProduceController {
 
         log.info("进入生产端controller，参数：{}", userId);
 //        return produceService.get(userId);
-        System.err.println(request.getHeader("token"));
-        return  ApiResponse.success(new User());
+//        System.err.println(request.getHeader("token"));
+        return ApiResponse.success(new User());
     }
 
     @RequestMapping("/user/get1")

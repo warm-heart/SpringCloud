@@ -23,15 +23,16 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        Annotation[] annotations = method.getDeclaredAnnotations();
-        Object o = handlerMethod.getBean();
-        if (rateLimiter.tryAcquire(1)) {
-            return true;
-        }
-        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-        return false;
+//        HandlerMethod handlerMethod = (HandlerMethod) handler;
+//        Method method = handlerMethod.getMethod();
+//        Annotation[] annotations = method.getDeclaredAnnotations();
+//        Object o = handlerMethod.getBean();
+//        if (rateLimiter.tryAcquire(1)) {
+//            return true;
+//        }
+//        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+//        return false;
+        return true;
     }
 
     @Override
