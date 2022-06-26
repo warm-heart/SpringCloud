@@ -10,6 +10,9 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.util.List;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -26,7 +29,6 @@ public class ProduceApplication {
         Resource[] resources = resourceResolver.getResources(location);
 
         System.err.println(resources);
-
         //www.baidu.com/cs/hostRunning   //第一个参数使用https
 //        PingUrl p = new PingUrl(false, "");
 //        // p.setExpectedContent("true");

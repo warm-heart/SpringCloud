@@ -4,10 +4,14 @@ import com.micro.commons.dto.ApiResponse;
 import com.micro.commons.entity.User;
 import com.micro.produce.service.ProduceService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
 
 
 /**
@@ -17,16 +21,18 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Slf4j
 public class ProduceController {
-    @Autowired
+    @Resource
     ProduceService produceService;
+
+    @Resource
+    RedissonClient redissonClient;
 
     @RequestMapping("/get")
     public ApiResponse<User> get111(@RequestParam String userId, HttpServletRequest request) {
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+
+        //获取分布式锁
+        RLock lock = redissonClient.getLock("PURCHASE");
+        lock.lock();
 
         log.info("进入生产端controller，参数：{}", userId);
 //        return produceService.get(userId);
