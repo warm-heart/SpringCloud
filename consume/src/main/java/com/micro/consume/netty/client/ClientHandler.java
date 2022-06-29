@@ -5,8 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
-
-import java.nio.charset.Charset;
+import io.netty.util.internal.StringUtil;
 
 /**
  * @author wangqianlong
@@ -17,9 +16,9 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         //发送消息到服务端
-//        ctx.writeAndFlush(Unpooled.copiedBuffer("客户端连接到服务端事件消息；" +
-//                "你好服务端，我是客户端", CharsetUtil.UTF_8));
-//        ctx.writeAndFlush(Unpooled.copiedBuffer("第二", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("客户端连接到服务端事件消息；" +
+                "你好服务端，我是客户端" + StringUtil.NEWLINE, CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("第二" + StringUtil.NEWLINE, CharsetUtil.UTF_8));
     }
 
     @Override
