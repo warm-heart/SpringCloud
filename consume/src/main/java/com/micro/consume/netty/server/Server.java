@@ -5,9 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -45,7 +45,7 @@ public class Server {
                     // childOption()是提供给父管道接收到的连接，也就是workerGroup线程。
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childOption(ChannelOption.SO_RCVBUF, 10240)
-                    .childOption(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(16,16,1024))
+                    .childOption(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(16, 16, 1024))
                     //tcp 优化
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     //使用匿名内部类的形式初始化通道对象
@@ -55,7 +55,10 @@ public class Server {
                             //给pipeline管道设置处理器
                             socketChannel.pipeline()
                                     //连接管理处
-                                    .addLast(new IdleStateHandler(0, 0, 5))
+                                    //.addLast(new IdleStateHandler(0, 0, 5))
+                                    //解码器需要设置数据的最大长度，我这里设置成1024
+                                    .addLast(new LineBasedFrameDecoder(1024))
+                                    //给pipeline管道设置业务处理器
                                     .addLast(new DecodeHandle())
                                     .addLast(new ServerOutHandle())
                                     .addLast(new ServerHandle());
