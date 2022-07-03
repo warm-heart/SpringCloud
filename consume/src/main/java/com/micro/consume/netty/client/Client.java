@@ -1,16 +1,15 @@
 package com.micro.consume.netty.client;
 
+import com.micro.consume.netty.SendMessage;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.LineEncoder;
-import io.netty.handler.codec.string.LineSeparator;
-import io.netty.util.CharsetUtil;
-import io.netty.util.internal.StringUtil;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 /**
  * @author wangqianlong
@@ -35,15 +34,15 @@ public class Client {
                         protected void initChannel(SocketChannel ch) {
                             //添加客户端通道的处理器
                             ch.pipeline()
-                                    //拆包解码
-                                    //.addLast(new ProtobufVarint32FrameDecoder())
-                                    // .addLast(new ProtobufDecoder(CIMResponseProto.CIMResProtocol.getDefaultInstance()))
+//                                  //拆包解码
+//                                    .addLast(new ProtobufVarint32FrameDecoder())
+                                    .addLast(new ProtobufDecoder(MessageResult.Message.getDefaultInstance()))
                                     //拆包编码
-                                    //.addLast(new ProtobufVarint32LengthFieldPrepender())
-                                    //.addLast(new ProtobufEncoder())
-                                    //业务处理器
+                                    .addLast(new ProtobufVarint32LengthFieldPrepender())
+                                    .addLast(new ProtobufEncoder())
                                     //添加编码器，使用默认的符号\n，字符集是UTF-8
-                                    .addLast(new LineEncoder(LineSeparator.DEFAULT, CharsetUtil.UTF_8))
+//                                    .addLast(new LineEncoder(LineSeparator.DEFAULT, CharsetUtil.UTF_8))
+                                    //业务处理器
                                     .addLast(new ClientHandler());
                         }
                     });
@@ -82,8 +81,12 @@ public class Client {
     public static void main(String[] args) throws Exception {
         Client client = new Client();
         client.start();
-        client.channelFuture.channel()
-                .writeAndFlush(Unpooled.copiedBuffer("客户端往服务端再发一次消息" + StringUtil.NEWLINE, CharsetUtil.UTF_8));
+        for (int i = 4; i < 50; i++) {
+            SendMessage.send(i, "message", client.channelFuture.channel());
+
+        }
+//        client.channelFuture.channel()
+//                .writeAndFlush(Unpooled.copiedBuffer("客户端往服务端再发一次消息" + StringUtil.NEWLINE, CharsetUtil.UTF_8));
         client.channelFuture.channel().closeFuture().sync();
         client.eventExecutors.shutdownGracefully();
         System.err.println("over");

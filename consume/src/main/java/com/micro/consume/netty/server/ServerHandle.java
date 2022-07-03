@@ -1,12 +1,11 @@
 package com.micro.consume.netty.server;
 
-import io.netty.buffer.ByteBuf;
+import com.micro.consume.netty.client.MessageResult;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.SocketAddress;
@@ -22,8 +21,13 @@ public class ServerHandle extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         log.info("服务端channelRead");
         //获取客户端发送过来的消息
-        ByteBuf byteBuf = (ByteBuf) msg;
-        System.out.println("收到客户端" + ctx.channel().remoteAddress() + "发送的消息：" + byteBuf.toString(CharsetUtil.UTF_8));
+//        ByteBuf byteBuf = (ByteBuf) msg;
+//        System.out.println("收到客户端" + ctx.channel().remoteAddress() + "发送的消息：" + byteBuf.toString(CharsetUtil.UTF_8));
+
+
+        MessageResult.Message message = (MessageResult.Message) msg;
+        System.err.println(message.getId() + message.getContent());
+
 
 //        //获取到线程池eventLoop（bossGroup），添加线程，执行
 //        ctx.channel().eventLoop().execute(() -> {
